@@ -26,7 +26,13 @@ io.on('connection', (socket) => {
     socket.on('join-room', (roomId, userId) => {
         socket.join(roomId);
         socket.broadcast.to(roomId).emit('new-user-connected', userId);
+
+        socket.on('disconnect', () => {
+            socket.broadcast.to(roomId).emit('clear-grid', userId);
+        })
     });
+
+    
 });
 
 server.listen(PORT);

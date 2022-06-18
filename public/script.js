@@ -22,6 +22,11 @@ navigator.mediaDevices.getUserMedia({
 
     peer.on('open', (userId) => {
         socket.emit('join-room', roomId, userId);
+        
+    })
+
+    socket.on('clear-grid', (userId) => {
+        document.getElementById(userId).remove();
     })
 
     connectMediaToNewUser(stream);
@@ -46,7 +51,7 @@ const connectMediaToNewUser = (stream) => {
     socket.on('new-user-connected', (otherUserId) => {
         const call = peer.call(otherUserId, stream);
         const AnswererVideo = document.createElement("video");
-        AnswererVideo.id = 'otherUser:' + otherUserId;
+        AnswererVideo.id = otherUserId;
         AnswererVideo.muted = true;
         call.on('stream', (AnswererStream) => {
             addVideoStream(AnswererVideo, AnswererStream)
@@ -59,7 +64,7 @@ const AnswerCallForFromUser = (stream) => {
     peer.on('call', call => {
         call.answer(stream);
         const CallerVideo = document.createElement("video");
-        CallerVideo.id = 'otherUser:' + call.peer;
+        CallerVideo.id = call.peer;
         CallerVideo.muted = true;
         call.on('stream', (CallerStream) => {
             addVideoStream(CallerVideo, CallerStream)
