@@ -81,6 +81,11 @@ body {
 
 .chat-area {
     flex: 1;
+    overflow: auto;
+}
+
+.chats {
+    padding: 5% 5%;
 }
 
 .text-input-area {
