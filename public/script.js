@@ -115,5 +115,27 @@ const AnswerCallForFromUser = (stream) => {
 }
 
 
+let message = $('.text-message');
+
+$('html').keydown(key => {
+    if(key.which == 13 && message.val().length != 0){
+        console.log(message.val())
+        socket.emit('message', message.val());
+        message.val('');
+    }
+})
+
+
+socket.on('createMessage', (textMessage, userId) => {
+    $('.chats').append(
+        `<li style='list-style:none; padding: 2% 0%'>
+        <div class="message" style='border-radius:5px; background-color: rgba(94, 94, 94, 0.4); padding: 0% 3%; width:fit-content; max-width: 250px; word-wrap: break-word;'>
+        <span style='font-weight: bold;'>user ${userId.slice(0, 4)}</span><br>
+        <span style="max-width: 200px;">${textMessage}</span>
+        </div>
+        </li>`
+    )
+})
+
 
 

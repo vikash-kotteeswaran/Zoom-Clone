@@ -7,6 +7,7 @@ const io = socket(server);
 const {ExpressPeerServer} = require('peer');
 const peerServer = ExpressPeerServer(server, {debug: true})
 const {v4: uuidv4} = require('uuid');
+const { text } = require('express');
 const PORT = 3000;
 app.set('view engine', 'ejs');
 app.use(express.static("public"))
@@ -26,6 +27,9 @@ io.on('connection', (socket) => {
     socket.on('join-room', (roomId, userId) => {
         socket.join(roomId);
         socket.broadcast.to(roomId).emit('new-user-connected', userId);
+        socket.on('message', (textMessage) => {
+            io.to(roomId).emit('createMessage', textMessage, userId)
+        })
 
         socket.on('disconnect', () => {
             socket.broadcast.to(roomId).emit('clear-grid', userId);
