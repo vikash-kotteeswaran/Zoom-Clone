@@ -1,18 +1,15 @@
 const socket = io('/');
 const Video = document.createElement("video");
+Video.muted = true;
 Video.id = 'User';
 const videoGrid = document.querySelector('#video-grid');
-let videoStream = true;
-let audioStream = true;
-
-Video.muted = true;
 
 document.getElementsByClassName("main-right")[0].style.display = "none";
 document.getElementsByClassName("main-left")[0].style.flexGrow = "1";
 
 navigator.mediaDevices.getUserMedia({
-    video: videoStream,
-    audio: audioStream
+    video: true,
+    audio: true
 }).then((stream) => {
 
     window.Stream = stream
@@ -27,6 +24,7 @@ navigator.mediaDevices.getUserMedia({
     })
 
     peer.on('open', (userId) => {
+        window.UserId = userId;
         socket.emit('join-room', roomId, userId);
         
     })
@@ -45,25 +43,29 @@ navigator.mediaDevices.getUserMedia({
 
 
 const muteVideo = () => {
-    if(audioStream == true){
+    const audioStream = Stream.getTracks()[0].enabled;
+    if(audioStream){
         Stream.getTracks()[0].enabled = false;
-        document.getElementsByClassName("fas fa-microphone")[0].className = "fas fa-microphone-slash";
+        document.getElementsByClassName("mute-button")[0].innerHTML = `<i class="unmute fas fa-microphone-slash"></i> 
+                                                                       <span class="unmute-span">Unmute</span>`;
     } else{
         Stream.getTracks()[0].enabled = true;
-        document.getElementsByClassName("fas fa-microphone-slash")[0].className = "fas fa-microphone";
+        document.getElementsByClassName("mute-button")[0].innerHTML = `<i class="mute fas fa-microphone"></i> 
+                                                                       <span class="mute-span">Mute</span>`;
     }
-    audioStream = !audioStream
 }
 
 const stopVideo = () => {
-    if(videoStream == true){
+    const videoStream = Stream.getTracks()[1].enabled;
+    if(videoStream){
         Stream.getTracks()[1].enabled = false;
-        document.getElementsByClassName("fas fa-video")[0].className = "fas fa-video-slash";
+        document.getElementsByClassName("stop-button")[0].innerHTML = `<i class="play-video fas fa-video-slash"></i>
+                                                                        <span class="play-video-span">Play video</span>`;
     } else{
         Stream.getTracks()[1].enabled = true;
-        document.getElementsByClassName("fas fa-video-slash")[0].className = "fas fa-video";
+        document.getElementsByClassName("stop-button")[0].innerHTML = `<i class="stop-video fas fa-video"></i>
+                                                                        <span class="stop-video-span">Stop video</span>`;
     }
-    videoStream = !videoStream
 }
 
 const chatRoom = () => {
@@ -127,15 +129,29 @@ $('html').keydown(key => {
 
 
 socket.on('createMessage', (textMessage, userId) => {
+    let DivRight = "";
+    let SpanRight = "";
+
+    if(userId == UserId){
+        DivRight = "margin-left: auto; margin-right: 0;";
+        SpanRight = "float: right;"
+    }
     $('.chats').append(
-        `<li style='list-style:none; padding: 2% 0%'>
-        <div class="message" style='border-radius:5px; background-color: rgba(94, 94, 94, 0.4); padding: 0% 3%; width:fit-content; max-width: 250px; word-wrap: break-word;'>
-        <span style='font-weight: bold;'>user ${userId.slice(0, 4)}</span><br>
+        `<li style='list-style:none; padding: 2% 3%;'>
+        <div class="message" style="${DivRight}">
+        <span style='font-weight: bold;${SpanRight}'>user ${userId.slice(0, 4)}</span><br>
         <span style="max-width: 200px;">${textMessage}</span>
         </div>
         </li>`
     )
+    scrollBottom()
 })
+
+
+const scrollBottom = () => {
+    let chatDiv = $('.chat-area');
+    chatDiv.scrollTop(chatDiv.prop('scrollHeight'));
+}
 
 
 
