@@ -1,3 +1,8 @@
+:root {
+    --h1: 100%;
+    --w1: auto;
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -28,6 +33,14 @@ body {
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
+    max-width: 1000px;
+    max-height: 700px;
+}
+
+video {
+    height: var(--h1);
+    width: var(--w1);
+    padding: 10px;
 }
 
 .controls-bar {
@@ -124,10 +137,4 @@ body {
     padding: 3% 5%; 
     width: fit-content; 
     word-break: break-all;
-}
-
-video {
-    height: 200px;
-    width: 250px;
-    padding: 10px;
 }

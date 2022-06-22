@@ -3,6 +3,7 @@ const Video = document.createElement("video");
 Video.muted = true;
 Video.id = 'User';
 const videoGrid = document.querySelector('#video-grid');
+let nUsers = 1;
 
 document.getElementsByClassName("main-right")[0].style.display = "none";
 document.getElementsByClassName("main-left")[0].style.flexGrow = "1";
@@ -26,18 +27,18 @@ navigator.mediaDevices.getUserMedia({
     peer.on('open', (userId) => {
         window.UserId = userId;
         socket.emit('join-room', roomId, userId);
-        
     })
 
     socket.on('clear-grid', (userId) => {
         document.getElementById(userId).remove();
+        nUsers -= 1;
+        changeVideoSize()
     })
 
 
     connectMediaToNewUser(Stream);
 
     AnswerCallForFromUser(Stream);
-
     
 })
 
@@ -81,7 +82,6 @@ const chatRoom = () => {
 
 const addVideoStream = (video, stream) => {
     video.srcObject = stream;
-
     video.addEventListener('loadedmetadata', () => {
         video.play()
         
@@ -92,6 +92,7 @@ const addVideoStream = (video, stream) => {
 
 const connectMediaToNewUser = (stream) => {
     socket.on('new-user-connected', (otherUserId) => {
+        nUsers += 1;
         const call = peer.call(otherUserId, stream);
         const AnswererVideo = document.createElement("video");
         AnswererVideo.id = otherUserId;
@@ -99,21 +100,24 @@ const connectMediaToNewUser = (stream) => {
         call.on('stream', (AnswererStream) => {
             addVideoStream(AnswererVideo, AnswererStream)
         })
-        
+        changeVideoSize()
     })
 }
 
 const AnswerCallForFromUser = (stream) => {
     peer.on('call', call => {
+        nUsers += 1;
         call.answer(stream);
         const CallerVideo = document.createElement("video");
         CallerVideo.id = call.peer;
         // CallerVideo.muted = true;
+        changeVideoSize()
         call.on('stream', (CallerStream) => {
             addVideoStream(CallerVideo, CallerStream)
         })
-
+        changeVideoSize()
     })
+
 }
 
 
@@ -153,5 +157,23 @@ const scrollBottom = () => {
     chatDiv.scrollTop(chatDiv.prop('scrollHeight'));
 }
 
+const VideoGridDiv = (n) =>{
+    if(n == 3){
+        return 2;
+    }
+    const sqrN = Math.sqrt(n);
+    if(sqrN%1 != 0){
+        return Math.floor(sqrN);
+    } else{
+        return sqrN;
+    }
+}
+
+const changeVideoSize = () => {
+    const rows = VideoGridDiv(nUsers);
+    console.log(nUsers, rows, Math.round(90/rows), Math.round(90/Math.ceil(nUsers/rows)));
+    document.documentElement.style.setProperty('--h1', `${Math.round(90/rows)}%`);
+    document.documentElement.style.setProperty('--w1', `${Math.round(90/Math.ceil(nUsers/rows))}%`);
+}
 
 
