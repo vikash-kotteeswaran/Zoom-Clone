@@ -8,7 +8,8 @@ const {ExpressPeerServer} = require('peer');
 const peerServer = ExpressPeerServer(server, {debug: true})
 const {v4: uuidv4} = require('uuid');
 const { text } = require('express');
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
+
 app.set('view engine', 'ejs');
 app.use(express.static("public"))
 app.use('/peerjs', peerServer);
