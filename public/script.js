@@ -176,4 +176,9 @@ const changeVideoSize = () => {
     document.documentElement.style.setProperty('--w1', `${Math.round(90/Math.ceil(nUsers/rows))}%`);
 }
 
+const closeVideo = () => {
+    window.location.href = '\meeting-ended';
+    socket.emit('end-meeting');
+}
+
 

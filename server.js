@@ -19,10 +19,16 @@ app.get('/', (req, res) => {
     res.redirect(`${uuidv4()}`)
 })
 
+app.get('/meeting-ended', (req, res) => {
+    res.status(200);
+    res.render('meeting-ended', {roomId: req.params.room});
+})
+
 app.get('/:room', (req, res) => {
     res.status(200);
-    res.render('room', {roomId: req.params.room})
+    res.render('room', {roomId: req.params.room});
 })
+
 
 io.on('connection', (socket) => {
     socket.on('join-room', (roomId, userId) => {
