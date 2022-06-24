@@ -1,0 +1,140 @@
+:root {
+    --h1: 100%;
+    --w1: auto;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.main {
+    display: flex;
+    height: 100vh;
+    color: #d8d8d8;
+}
+
+.main-left {
+    flex: 0.7;
+    display: flex;
+    flex-direction: column;
+}
+
+.video-platform {
+    display: flex;
+    background-color: #000000;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+}
+
+#video-grid {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    max-width: 1000px;
+    max-height: 700px;
+}
+
+video {
+    height: var(--h1);
+    width: var(--w1);
+    padding: 10px;
+}
+
+.controls-bar {
+    display: flex;
+    flex-direction: row;
+    background-color: #122222;
+    justify-content: space-between;
+    padding: 5px;
+}
+
+.control-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.control-button {
+    display: flex;
+    flex-direction: column;
+    padding: 8px 10px;
+    justify-content: center;
+    align-items: center;
+    min-width: 80px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    background-color: #122222;
+    color: #d8d8d8;
+    white-space: nowrap;
+}
+
+.control-button:hover {
+    background-color: #515151;
+}
+
+.stop-button {
+    min-width: 95.28px;
+}
+
+.unmute, .play-video {
+    color: red;
+}
+
+.leave-meeting {
+    color: red;
+}
+
+.main-right {
+    flex: 0.3;
+    /* max-width: 30%; */
+    display: flex;
+    flex-direction: column;
+    background-color: #242322;
+    border-left: 3px solid #243322;
+}
+
+.chat-header {
+    text-align: center;
+    padding: 15px 10px;
+}
+
+.chat-area {
+    flex: 1;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    scroll-behavior: smooth;
+}
+
+.chat-area::-webkit-scrollbar {
+    width: 0;
+}
+
+.chats {
+    padding: 5% 5%;
+}
+
+.text-input-area {
+    padding: 20px 10px;
+    display: flex;
+    align-items: center;
+    border-top: 2px solid #243322;
+}
+
+.text-message {
+    background: transparent;
+    color: #ffffff;
+    outline: none;
+    border: none;
+}
+
+.message {
+    border-radius:5px; 
+    background-color: rgba(94, 94, 94, 0.4); 
+    padding: 3% 5%; 
+    width: fit-content; 
+    word-break: break-all;
+}
