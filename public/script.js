@@ -21,7 +21,7 @@ navigator.mediaDevices.getUserMedia({
     window.peer = new Peer(undefined, {
         path: '/peerjs',
         host: '/',
-        port: '443'
+        port: '3000'
     })
 
     peer.on('open', (userId) => {
@@ -177,8 +177,7 @@ const changeVideoSize = () => {
 }
 
 const closeVideo = () => {
-    window.location.href = '\meeting-ended';
-    socket.emit('end-meeting');
+    window.location.href = `/${roomId}/meeting-ended`;
 }
 
 
